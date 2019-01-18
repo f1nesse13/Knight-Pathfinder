@@ -26,6 +26,11 @@ module Searches
     end
     nil
   end
+
+def count
+  1 + children.map(&:count).inject(:+)
+  end
+
 end
 
 class PolyTreeNode
@@ -46,8 +51,9 @@ class PolyTreeNode
 
   def parent=(parent)
     return if self.parent == parent
-
-    self.parent._children.delete(self) if self.parent
+    if self.parent
+      self.parent._children.delete(self) 
+    end
 
     @parent = parent
     self.parent._children << self unless self.parent.nil?
@@ -60,7 +66,7 @@ class PolyTreeNode
   end
 
   def remove_child(child)
-    if child && !children.include?(child)
+    if child && !self.children.include?(child)
       raise 'Tried to remove node thats not a child'
     end
 
